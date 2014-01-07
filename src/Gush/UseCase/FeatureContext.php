@@ -11,6 +11,6 @@ class FeatureContext extends BehatContext
      */
     public function __construct(array $parameters)
     {
-        $this->useContext('gush', new GushContext());
+        $this->useContext('gush', new GushContext($parameters));
     }
 }
