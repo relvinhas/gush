@@ -3,3 +3,7 @@ default:
         tags: "~@wip"
     formatter:
         name: progress
+    paths:
+        features: use_cases
+    context:
+        class: Gush\UseCase\FeatureContext

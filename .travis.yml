@@ -11,4 +11,4 @@ before_script:
 
 script:
   - phpunit
-  - php bin/behat --format=pretty
+  - php bin/behat --format=pretty --verbose --stop-on-failure

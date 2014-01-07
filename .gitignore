@@ -5,6 +5,7 @@
 /gsh.phar
 /box.json
 /.first-time-run
+/behat.yml
 
 /.sculpin
 /output_dev
