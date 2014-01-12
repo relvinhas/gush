@@ -18,19 +18,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Luis Cordova <cordoval@gmail.com>
  */
-class PullRequestMergeCommand extends BaseCommand
+class PullRequestMergeCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('pull-request:merge')
             ->setDescription('Pull request command')
             ->addArgument('pr_number', InputArgument::REQUIRED, 'Pull Request number')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
         ;
     }
 
@@ -39,8 +39,7 @@ class PullRequestMergeCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $org = $input->getArgument('org');
-        $repo = $input->getArgument('repo');
+        list($org, $repo) = $this->getOrgAndRepo($input);
         $prNumber = $input->getArgument('pr_number');
 
         $client = $this->getGithubClient();

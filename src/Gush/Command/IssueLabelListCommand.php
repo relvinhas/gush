@@ -20,18 +20,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Daniel Gomes <me@danielcsgomes.com>
  */
-class IssueLabelListCommand extends BaseCommand
+class IssueLabelListCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('issue:label:list')
             ->setDescription('List of the issue\'s labels')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
         ;
     }
 
@@ -40,8 +40,7 @@ class IssueLabelListCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $organization = $input->getArgument('org');
-        $repository = $input->getArgument('repo');
+        list($organization, $repository) = $this->getOrgAndRepo($input);
 
         $client = $this->getGithubClient();
 

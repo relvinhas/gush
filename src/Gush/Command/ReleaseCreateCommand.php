@@ -18,12 +18,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class ReleaseCreateCommand extends BaseCommand
+class ReleaseCreateCommand extends BaseRepoCommand
 {
     protected $workDir;
 
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('release:create')
             ->setDescription('Create a new Release')
@@ -54,8 +56,7 @@ class ReleaseCreateCommand extends BaseCommand
         $client = $this->getApplication()->getGithubClient();
         $releaseName = $input->getOption('name');
         $tag = $input->getArgument('tag');
-        $repo = $input->getArgument('repo');
-        $org = $input->getArgument('org');
+        list($org, $repo) = $this->getOrgAndRepo($input);
         $assetFiles = $input->getOption('asset-file');
         $assetNames = $input->getOption('asset-name');
         $assetContentTypes = $input->getOption('asset-content-type');

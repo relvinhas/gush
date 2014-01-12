@@ -22,19 +22,19 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PullRequestCreateCommand extends BaseCommand
+class PullRequestCreateCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('pull-request:create')
             ->setDescription('Pull request create command')
             ->addArgument('base_branch', InputArgument::OPTIONAL, 'Name of the base branch to PR', 'master')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
         ;
     }
 
@@ -153,8 +153,7 @@ class PullRequestCreateCommand extends BaseCommand
         $description
     )
     {
-        $repo = $input->getArgument('repo');
-        $org = $input->getArgument('org');
+        list($org, $repo) = $this->getOrgAndRepo($input);
         $baseBranch = $input->getArgument('base_branch');
 
         $github = $this->getParameter('github');

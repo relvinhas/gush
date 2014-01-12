@@ -20,19 +20,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Luis Cordova <cordoval@gmail.com>
  */
-class IssueShowCommand extends BaseCommand
+class IssueShowCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('issue:show')
             ->setDescription('Show given issue')
             ->addArgument('issue_number', InputArgument::REQUIRED, 'Issue number')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command show details of the given issue for either the current or the given organization
 and repository:
@@ -48,8 +48,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $organization = $input->getArgument('org');
-        $repository = $input->getArgument('repo');
+        list($organization, $repository) = $this->getOrgAndRepo($input);
         $issueNumber = $input->getArgument('issue_number');
 
         $client = $this->getGithubClient();

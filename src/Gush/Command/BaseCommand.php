@@ -54,40 +54,6 @@ class BaseCommand extends Command
     }
 
     /**
-     * @return string The repository name
-     */
-    protected function getRepoName()
-    {
-        $process = new Process('git remote show -n origin | grep Fetch | cut -d "/" -f 2 | cut -d "." -f 1', getcwd());
-        $process->run();
-
-        $output = trim($process->getOutput());
-        if (empty($output)) {
-            $process = new Process('git remote show -n origin | grep Fetch | cut -d "/" -f 5 | cut -d "." -f 1', getcwd());
-            $process->run();
-        }
-
-        return trim($process->getOutput());
-    }
-
-    /**
-     * @return string The vendor name
-     */
-    protected function getVendorName()
-    {
-        $process = new Process('git remote show -n origin | grep Fetch | cut -d ":" -f 3 | cut -d "/" -f 1', getcwd());
-        $process->run();
-
-        $output = trim($process->getOutput());
-        if (empty($output)) {
-            $process = new Process('git remote show -n origin | grep Fetch | cut -d ":" -f 3 | cut -d "/" -f 4', getcwd());
-            $process->run();
-        }
-
-        return trim($process->getOutput());
-    }
-
-    /**
      * @return string The branch name
      */
     protected function getBranchName()

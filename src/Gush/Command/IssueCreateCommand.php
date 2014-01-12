@@ -21,18 +21,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Luis Cordova <cordoval@gmail.com>
  */
-class IssueCreateCommand extends BaseCommand
+class IssueCreateCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('issue:create')
             ->setDescription('Creates an issue')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command creates a new issue for either the current or the given organization
 and repository:
@@ -48,8 +48,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $organization = $input->getArgument('org');
-        $repository = $input->getArgument('repo');
+        list($organization, $repository) = $this->getOrgAndRepo($input);
 
         $client = $this->getGithubClient();
         $emptyValidator = function ($string) {

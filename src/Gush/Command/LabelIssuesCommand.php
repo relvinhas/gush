@@ -23,18 +23,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Daniel Gomes <me@danielcsgomes.com>
  */
-class LabelIssuesCommand extends BaseCommand
+class LabelIssuesCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('label')
             ->setDescription('Label issues/pull requests of a repository')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
             ->addOption('new', null, InputOption::VALUE_NONE, 'Get only new issues/pull requests')
             ->addOption('issues', null, InputOption::VALUE_NONE, 'Get issues')
             ->addOption('pull-requests', null, InputOption::VALUE_NONE, 'Get pull requests')
@@ -46,8 +46,7 @@ class LabelIssuesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $organization = $input->getArgument('org');
-        $repository = $input->getArgument('repo');
+        list($organization, $repository) = $this->getOrgAndRepo($input);
         $pullRequests = $input->getOption('pull-requests');
         $issues = $input->getOption('issues');
 

@@ -15,19 +15,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ReleaseRemoveCommand extends BaseCommand
+class ReleaseRemoveCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('release:delete')
             ->setDescription('Remove release')
             ->addArgument('id', InputArgument::REQUIRED, 'ID of the release')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
         ;
     }
 
@@ -38,8 +38,7 @@ class ReleaseRemoveCommand extends BaseCommand
     {
         $client = $this->getGithubClient();
         $id = $input->getArgument('id');
-        $repo = $input->getArgument('repo');
-        $org = $input->getArgument('org');
+        list($org, $repo) = $this->getOrgAndRepo($input);
 
         $output->writeln(sprintf(
             '<info>Deleting release </info>%s<info> on </info>%s<info>/</info>%s',

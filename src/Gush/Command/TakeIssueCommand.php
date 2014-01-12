@@ -15,20 +15,20 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TakeIssueCommand extends BaseCommand
+class TakeIssueCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('pull-request:take')
             ->setDescription('Take an issue')
             ->addArgument('issue_number', InputArgument::REQUIRED, 'Number of the issue')
             ->addArgument('base_branch', InputArgument::OPTIONAL, 'Name of the base branch to checkout from', 'master')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
         ;
     }
 
@@ -39,8 +39,7 @@ class TakeIssueCommand extends BaseCommand
     {
         $issueNumber = $input->getArgument('issue_number');
         $baseBranch = $input->getArgument('base_branch');
-        $org = $input->getArgument('org');
-        $repo = $input->getArgument('repo');
+        list($org, $repo) = $this->getOrgAndRepo($input);
 
         $client = $this->getGithubClient();
         $issue = $client

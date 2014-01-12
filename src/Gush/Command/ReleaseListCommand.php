@@ -15,18 +15,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ReleaseListCommand extends BaseCommand
+class ReleaseListCommand extends BaseRepoCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('release:list')
             ->setDescription('List of the releases')
-            ->addArgument('org', InputArgument::OPTIONAL, 'Name of the GitHub organization', $this->getVendorName())
-            ->addArgument('repo', InputArgument::OPTIONAL, 'Name of the GitHub repository', $this->getRepoName())
         ;
     }
 
@@ -36,8 +36,7 @@ class ReleaseListCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $client = $this->getGithubClient();
-        $repo = $input->getArgument('repo');
-        $org = $input->getArgument('org');
+        list($org, $repo) = $this->getOrgAndRepo($input);
 
         $releases = $client->api('repo')->releases()->all($org, $repo);
 
