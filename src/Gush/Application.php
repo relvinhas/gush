@@ -49,6 +49,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
+use Gush\Helper\ReportHelper;
 
 class Application extends BaseApplication
 {
@@ -74,6 +75,7 @@ class Application extends BaseApplication
         $this->gitHelper = new GitHelper();
         $this->textHelper = new TextHelper();
         $this->tableHelper = new TableHelper();
+        $this->reportHelper = new ReportHelper();
 
         // the parent dispatcher is private and has
         // no accessor, so we set it here so we can access it.
@@ -124,6 +126,7 @@ class Application extends BaseApplication
         $helperSet->set($this->gitHelper);
         $helperSet->set($this->textHelper);
         $helperSet->set($this->tableHelper);
+        $helperSet->set($this->reportHelper);
 
         return $helperSet;
     }

@@ -1,0 +1,6 @@
+{% block h1 %}{% spaceless %}
+    {{ title }}
+    {% for i in range(0, title|length) %}={% endfor %}
+{% endspaceless %}{% endblock %}
+
+{% block label %}{{ value }}{% endblock %}

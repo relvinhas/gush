@@ -1,0 +1,24 @@
+Milestone Report
+================
+{% for issue_uniq_milestone in data|uniq('milestone.title')|sort %}
+{% set milestone_title = issue_uniq_milestone.milestone.title %}
+{% if milestone_title != '' %}
+
+{{ milestone_title }}
+{% for i in range(0, milestone_title|length) %}-{% endfor %}
+
+
+{% for issue in data|filter_eq('milestone.title', milestone_title) %}
+{% include "_issue.twig" with {'issue': issue} %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+{% for issue in data|filter_eq('milestone.title', '') %}
+{% if loop.first %}
+Issues without milestone
+------------------------
+
+{% endif %}
+{% include "_issue.twig" with {'issue': issue} %}
+{% endfor %}

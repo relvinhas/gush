@@ -1,0 +1,1 @@
+{% if labels %}[{% for label in labels %}*{{ label.name }}*{% if not loop.last %}, {% endif %}{% endfor %}] {% endif %}

@@ -61,6 +61,7 @@ class IssueListCommand extends BaseCommand implements TableFeature, GitHubFeatur
             ->addOption('direction', null, InputOption::VALUE_REQUIRED, $this->formatEnumDescription('direction'))
             ->addOption('since', null, InputOption::VALUE_REQUIRED, 'Only issues after this time are displayed.')
             ->addOption('type', null, InputOption::VALUE_REQUIRED, $this->formatEnumDescription('type'))
+            ->addOption('report', null, InputOption::VALUE_REQUIRED, 'Report')
             ->setHelp(
                 <<<EOF
 The <info>%command.name%</info> command lists issues from either the current or the given organization
@@ -87,6 +88,7 @@ EOF
     {
         $org = $input->getOption('org');
         $repo = $input->getOption('repo');
+        $report = $input->getOption('report');
 
         $client = $this->getGithubClient();
         $paginator = new ResultPager($client);
@@ -136,6 +138,12 @@ EOF
             }
         }
 
+        if ($report) {
+            $out = $this->getHelper('report')->render($report, $issues);
+            $output->write($out);
+            return 0;
+        }
+
         $table = $this->getHelper('table');
         $table->setHeaders(['#', 'State', 'PR?', 'Title', 'User', 'Assignee', 'Milestone', 'Labels', 'Created']);
 
@@ -160,5 +168,7 @@ EOF
         $table->setFooter(sprintf('%s issues', count($issues)));
 
         $table->render($output, $table);
+
+        return 0;
     }
 }
