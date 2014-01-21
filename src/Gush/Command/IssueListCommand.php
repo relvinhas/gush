@@ -26,26 +26,6 @@ use Gush\Feature\GitHubFeature;
  */
 class IssueListCommand extends BaseCommand implements TableFeature, GitHubFeature
 {
-    protected $enum = array(
-        'filter' => array(
-            'assigned',
-            'created',
-            'mentioned',
-            'subscribed',
-            'all',
-        ),
-        'state' => array(
-            'open',
-            'closed',
-        ),
-        'sort' => array(
-            'created',
-            'updated',
-        ),
-        'direction' => array('asc', 'desc'),
-        'type' => array('pr', 'issue'),
-    );
-
     /**
      * {@inheritdoc}
      */
@@ -95,7 +75,7 @@ EOF
 
         foreach (array('state', 'filter', 'sort', 'direction') as $key) {
             if ($v = $input->getOption($key)) {
-                $this->validateEnum($key, $v);
+                $this->getHelper('github')->validateEnum('issue', $key, $v);
                 $params[$key] = $v;
             }
         }
@@ -126,7 +106,7 @@ EOF
             $issue['_type'] = $isPr ? 'pr' : 'issue';
 
             if ($v = $input->getOption('type')) {
-                $this->validateEnum('type', $v);
+                $this->getHelper('github')->validateEnum('issue', 'type', $v);
 
                 if ($v == 'pr' && false === $isPr) {
                     unset($issues[$i]);

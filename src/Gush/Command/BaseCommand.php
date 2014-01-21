@@ -11,9 +11,6 @@
 
 namespace Gush\Command;
 
-use Ddd\Slug\Infra\SlugGenerator\DefaultSlugGenerator;
-use Ddd\Slug\Infra\Transliterator\LatinTransliterator;
-use Ddd\Slug\Infra\Transliterator\TransliteratorCollection;
 use Gush\Event\GushEvents;
 use Gush\Template\Messages;
 use Symfony\Component\Console\Command\Command;
@@ -33,16 +30,6 @@ class BaseCommand extends Command
     const COMMAND_FAILURE = 0;
 
     protected $enum = array();
-
-    /**
-     * Gets the Github's Client
-     *
-     * @return \Github\Client
-     */
-    protected function getGithubClient()
-    {
-        return $this->getApplication()->getGithubClient();
-    }
 
     /**
      * Gets a specific parameter
@@ -84,20 +71,6 @@ class BaseCommand extends Command
         if (!$process->isSuccessful() && !$allowFailures) {
             throw new \RuntimeException($process->getErrorOutput());
         }
-    }
-
-    /**
-     * @todo Move this to TextHelper
-     * @return DefaultSlugGenerator
-     */
-    protected function getSlugifier()
-    {
-        return new DefaultSlugGenerator(
-            new TransliteratorCollection(
-                [new LatinTransliterator()]
-            ),
-            []
-        );
     }
 
     /**
